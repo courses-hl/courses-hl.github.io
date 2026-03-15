@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | HouseLearning</title>
+    <style>
+        :root { --primary: #2d3436; --accent: #0984e3; --light: #f5f6fa; }
+        body { font-family: sans-serif; margin: 0; background: var(--light); }
+        
+        nav { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo { font-weight: bold; color: var(--accent); text-decoration: none; }
+        
+        .container { padding: 50px 10%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        
+        .course-card { 
+            background: white; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .course-card:hover { transform: translateY(-5px); }
+        .course-card img { width: 100%; height: 180px; object-fit: cover; }
+        .course-content { padding: 20px; }
+        .category { font-size: 0.8rem; color: var(--accent); font-weight: bold; text-transform: uppercase; }
+        .course-card h3 { margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">HouseLearning</a>
+        <div>
+            <a href="index.html" style="margin-right:20px; text-decoration:none; color:black;">Home</a>
+            <a href="dashboard.html" style="text-decoration:none; color:black;">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Available Courses</h1>
+        <div id="course-grid" class="grid">
+            <p>Loading the blueprints...</p>
+        </div>
+    </div>
+
+    <script>
+        // Fetch the JSON file
+        fetch('courses.json')
+            .then(response => response.json())
+            .then(data => {
+                const grid = document.getElementById('course-grid');
+                grid.innerHTML = ''; // Clear the loading text
+
+                data.forEach(course => {
+                    // Create the HTML for each card
+                    const card = `
+                        <a href="course-home.html?id=${course.id}" class="course-card">
+                            <img src="${course.image}" alt="${course.title}">
+                            <div class="course-content">
+                                <span class="category">${course.category}</span>
+                                <h3>${course.title}</h3>
+                                <p>${course.description}</p>
+                            </div>
+                        </a>
+                    `;
+                    grid.innerHTML += card;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading courses:', error);
+                document.getElementById('course-grid').innerHTML = '<p>Error loading courses. Please ensure you are running this on a local server.</p>';
+            });
+    </script>
+</body>
+</html>
