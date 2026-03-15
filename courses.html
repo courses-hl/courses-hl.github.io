@@ -51,17 +51,18 @@
     </div>
 
     <script>
-        // Fetch the JSON file
         fetch('courses.json')
             .then(response => response.json())
             .then(data => {
                 const grid = document.getElementById('course-grid');
-                grid.innerHTML = ''; // Clear the loading text
+                grid.innerHTML = ''; 
 
                 data.forEach(course => {
-                    // Create the HTML for each card
+                    // This creates the dynamic link to /learn/[course-id]/index.html
+                    const courseLink = `learn/${course.id}/index.html`;
+
                     const card = `
-                        <a href="course-home.html?id=${course.id}" class="course-card">
+                        <a href="${courseLink}" class="course-card">
                             <img src="${course.image}" alt="${course.title}">
                             <div class="course-content">
                                 <span class="category">${course.category}</span>
@@ -74,8 +75,8 @@
                 });
             })
             .catch(error => {
-                console.error('Error loading courses:', error);
-                document.getElementById('course-grid').innerHTML = '<p>Error loading courses. Please ensure you are running this on a local server.</p>';
+                console.error('Error:', error);
+                document.getElementById('course-grid').innerHTML = '<p>Error loading blueprints.</p>';
             });
     </script>
 </body>
